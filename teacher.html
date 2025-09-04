@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Student Dashboard</title>
+
+  <!-- Bootstrap & Font Awesome -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"/>
+
+  <!-- Custom CSS -->
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f4;
+      margin: 0;
+      padding: 0;
+    }
+
+    h2, h5, h6 {
+      color: #800000;
+    }
+
+    .text-maroon {
+      color: #800000 !important;
+    }
+
+    .sidebar {
+      background-color: #800000;
+      min-height: 100vh;
+      padding: 20px 15px;
+      color: white;
+      position: fixed;
+      width: 220px;
+      top: 0;
+      left: 0;
+    }
+
+    .sidebar .university-name {
+      font-weight: bold;
+      text-align: center;
+      font-size: 14px;
+      margin-bottom: 20px;
+    }
+
+    .sidebar .nav-link {
+      display: block;
+      color: #fff;
+      padding: 10px;
+      border-radius: 4px;
+      margin-bottom: 8px;
+      transition: background-color 0.3s;
+    }
+
+    .sidebar .nav-link:hover,
+    .sidebar .nav-link.active {
+      background-color: #a00000;
+      color: white;
+    }
+
+    .main-content {
+      margin-left: 220px;
+      padding: 30px;
+    }
+
+    .toggle-btn {
+      background: none;
+      border: none;
+      font-size: 24px;
+      padding: 15px;
+      color: #800000;
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 1100;
+      display: none;
+    }
+
+    .dashboard-card {
+      background-color: white;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 0 8px rgba(0, 0, 0, 0.07);
+      transition: transform 0.3s ease;
+    }
+
+    .stat-card:hover {
+      transform: scale(1.03);
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        left: -220px;
+        transition: left 0.3s ease;
+        z-index: 1000;
+      }
+
+      .sidebar.active {
+        left: 0;
+      }
+
+      .main-content {
+        margin-left: 0 !important;
+        padding-top: 60px;
+      }
+
+      .toggle-btn {
+        display: block;
+      }
+
+      .toggle-btn.hidden {
+        display: none !important;
+      }
+    }
+
+    /* Overlay to close sidebar on outside click */
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 100vw;
+      background-color: rgba(0, 0, 0, 0.3);
+      z-index: 999;
+    }
+
+    .overlay.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Overlay for outside click -->
+  <div id="overlay" class="overlay" onclick="closeSidebar()"></div>
+
+  <!-- Burger icon -->
+  <button id="burger" class="toggle-btn d-md-none" onclick="toggleSidebar()">
+    <i class="fas fa-bars"></i>
+  </button>
+
+  <div class="container-fluid">
+    <div class="row">
+      <!-- Sidebar -->
+      <nav class="col-md-2 sidebar" id="sidebar">
+        <div class="university-name">
+          MANUEL S. ENVERGA UNIVERSITY FOUNDATION CANDELARIA INC.
+        </div>
+        <hr />
+        <a href="teacher.html" class="nav-link active"><i class="fas fa-tachometer-alt mr-2"></i> Dashboard</a>
+        <a href="grademanagement.html" class="nav-link"><i class="fas fa-chart-line mr-2"></i> Grades Management</a>
+        <a href="#" class="nav-link"><i class="fas fa-file-alt mr-2"></i> Leaderboard</a>
+        <a href="#" class="nav-link"><i class="fas fa-user mr-2"></i> Profile</a>
+        <a href="#" onclick="logout();"><i class="fas fa-sign-out-alt mr-2"></i> Logout</a>
+      </nav>
+
+      <!-- Main Content -->
+      <main class="col-md-10 main-content">
+        <div id="dashboard-content" class="content active">
+          <h2 class="mb-4 text-maroon"><i class="fas fa-tachometer-alt text-dark"></i> Teacher Dashboard</h2>
+
+          <!-- Student Profile -->
+          <div class="dashboard-card">
+            <div class="d-flex align-items-center">
+              <div class="me-4">
+                <i class="fas fa-user-circle fa-5x text-secondary"></i>
+              </div>
+              <div>
+                <h5 class="mb-1 fw-bold" id="username">Maria Clara</h5>
+                <p class="mb-1" id="teacher_id">Teacher ID: A22-0001</p>
+                <p class="mb-1" id="department">Department: BS Computer Science</p>
+                <p class="mb-0" id="school_year">School Year: 2024-2025</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Stats -->
+          <div class="row mb-4">
+            <div class="col-md-3 col-6 mb-3">
+              <div class="card h-100 text-center stat-card">
+                <div class="card-body">
+                  <i class="fas fa-book fa-2x text-maroon mb-2"></i>
+                  <h6 class="fw-bold text-maroon">Classes</h6>
+                  <h2 class="text-dark">7</h2>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+              <div class="card h-100 text-center stat-card">
+                <div class="card-body">
+                  <i class="fas fa-credit-card fa-2x text-maroon mb-2"></i>
+                  <h6 class="fw-bold text-maroon">Subjects</h6>
+                  <h2 class="text-dark">32</h2>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+              <div class="card h-100 text-center stat-card">
+                <div class="card-body">
+                  <i class="fas fa-star fa-2x text-maroon mb-2"></i>
+                  <h6 class="fw-bold text-maroon">Pending Grades</h6>
+                  <h2 class="text-dark" id="final_grade">1.00</h2>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-3 col-6 mb-3">
+              <div class="card h-100 text-center stat-card">
+                <div class="card-body">
+                  <i class="fas fa-trophy fa-2x text-maroon mb-2"></i>
+                  <h6 class="fw-bold text-maroon">Announcements</h6>
+                  <h2 class="text-dark">1</h2>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- JS -->
+   <script src="/javaScript/teacher.js"></script>
+  <script>
+    function toggleSidebar() {
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("overlay");
+      const burger = document.getElementById("burger");
+
+      sidebar.classList.add("active");
+      overlay.classList.add("active");
+      burger.classList.add("hidden");
+    }
+
+    function closeSidebar() {
+      const sidebar = document.getElementById("sidebar");
+      const overlay = document.getElementById("overlay");
+      const burger = document.getElementById("burger");
+
+      sidebar.classList.remove("active");
+      overlay.classList.remove("active");
+      burger.classList.remove("hidden");
+    }
+
+    function logout() {
+      localStorage.removeItem("loggedInUser");
+      window.location.href = "login.html";
+    }
+  </script>
+</body>
+</html>
